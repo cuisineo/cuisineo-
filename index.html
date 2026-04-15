@@ -80,7 +80,6 @@
     aspect-ratio: 4/3;
     overflow: hidden;
     background: #eee;
-    /* stop the page from being dragged sideways */
     touch-action: pan-y;
   }
 
@@ -88,12 +87,11 @@
     display: flex;
     width: 100%;
     height: 100%;
-    direction: ltr;   /* critical: keeps translateX predictable regardless of RTL page */
+    direction: ltr;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
   }
 
-  /* Each slide fills exactly the zone width */
   .carousel-slide {
     flex: 0 0 100%;
     height: 100%;
@@ -105,7 +103,6 @@
     justify-content: center;
   }
 
-  /* Image fills the slide, no text/icon on top */
   .carousel-slide img {
     position: absolute;
     inset: 0;
@@ -115,9 +112,8 @@
     display: block;
   }
 
-  /* Fallback: shown ONLY when image errors. Hidden by default. */
   .slide-fallback {
-    display: none;           /* hidden until JS shows it */
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -136,7 +132,6 @@
   .slide-fallback-icon svg { width: 28px; height: 28px; }
   .slide-fallback-label { font-size: 12px; color: var(--muted); font-weight: 600; }
 
-  /* ── Video slide ── */
   .slide-video {
     background: linear-gradient(135deg, #16213e, #0f3460);
     cursor: pointer;
@@ -160,12 +155,6 @@
   .play-circle svg { width: 26px; height: 26px; margin-right: -3px; }
   .play-text { color: rgba(255,255,255,0.72); font-size: 12px; font-weight: 600; letter-spacing: 0.5px; }
 
-  /* ── Arrows ──
-     RTL page visual:
-       [ ← NEXT btn ]  ···image···  [ PREV btn → ]
-     Pressing the LEFT  arrow  → show NEXT slide (index +1)
-     Pressing the RIGHT arrow → show PREV slide (index -1)
-  */
   .carousel-arrow {
     position: absolute;
     top: 50%; transform: translateY(-50%);
@@ -188,11 +177,9 @@
   }
   .carousel-arrow svg { width: 16px; height: 16px; stroke: var(--deep); }
 
-  /* Physical position on screen */
-  .arr-left  { left:  12px; }   /* NEXT  in RTL  */
-  .arr-right { right: 12px; }   /* PREV  in RTL  */
+  .arr-left  { left:  12px; }
+  .arr-right { right: 12px; }
 
-  /* ── Dots ── */
   .carousel-dots {
     position: absolute; bottom: 10px;
     left: 50%; transform: translateX(-50%);
@@ -207,7 +194,6 @@
   }
   .dot.on { width: 20px; background: #fff; }
 
-  /* counter badge */
   .slide-counter {
     position: absolute; bottom: 10px; right: 12px;
     background: rgba(0,0,0,0.48); backdrop-filter: blur(4px);
@@ -237,14 +223,13 @@
     color: var(--deep); line-height: 1.4; margin-bottom: 11px;
   }
 
-  /* ── Stars: 4.5 ── */
   .rating-row { display: flex; align-items: center; gap: 7px; margin-bottom: 16px; }
   .stars { display: flex; align-items: center; gap: 2px; line-height: 1; }
   .s-full { color: #F5A623; font-size: 16px; }
   .s-half {
     display: inline-block;
     position: relative;
-    width: 8px;      /* only shows the left half of the star */
+    width: 8px;
     height: 16px;
     overflow: hidden;
     vertical-align: middle;
@@ -258,7 +243,6 @@
     color: #F5A623;
     white-space: nowrap;
   }
-  /* the empty right half */
   .s-empty {
     color: #E0E0E0;
     font-size: 16px;
@@ -555,7 +539,7 @@
 
     <div class="carousel-track" id="track">
 
-      <!-- ── Slide 1 ── -->
+      <!-- Slide 1 -->
       <div class="carousel-slide">
         <img src="IMG_2568.jpg" alt="صورة 1">
         <div class="slide-fallback">
@@ -571,7 +555,7 @@
         </div>
       </div>
 
-      <!-- ── Slide 2 ── -->
+      <!-- Slide 2 -->
       <div class="carousel-slide">
         <img src="IMG_2569.jpg" alt="صورة 2">
         <div class="slide-fallback">
@@ -587,7 +571,7 @@
         </div>
       </div>
 
-      <!-- ── Slide 3 ── -->
+      <!-- Slide 3 -->
       <div class="carousel-slide">
         <img src="IMG_2566.jpg" alt="صورة 3">
         <div class="slide-fallback">
@@ -603,7 +587,7 @@
         </div>
       </div>
 
-      <!-- ── Slide 4 ── -->
+      <!-- Slide 4 -->
       <div class="carousel-slide">
         <img src="IMG_2563.jpg" alt="صورة 4">
         <div class="slide-fallback">
@@ -619,7 +603,7 @@
         </div>
       </div>
 
-      <!-- ── Slide 5 ── -->
+      <!-- Slide 5 -->
       <div class="carousel-slide">
         <img src="IMG_2567.jpg" alt="صورة 5">
         <div class="slide-fallback">
@@ -635,7 +619,7 @@
         </div>
       </div>
 
-      <!-- ── Slide 6 — VIDEO ── -->
+      <!-- Slide 6 — VIDEO -->
       <div class="carousel-slide slide-video" onclick="openVideo()">
         <div class="play-btn">
           <div class="play-circle">
@@ -647,9 +631,8 @@
         </div>
       </div>
 
-    </div><!-- end track -->
+    </div>
 
-    <!-- Arrow: RIGHT side → NEXT slide -->
     <button class="carousel-arrow arr-right" id="arrNext" aria-label="التالي">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -657,7 +640,6 @@
       </svg>
     </button>
 
-    <!-- Arrow: LEFT side → PREV slide -->
     <button class="carousel-arrow arr-left" id="arrPrev" aria-label="السابق">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -668,25 +650,19 @@
     <div class="carousel-dots" id="dots"></div>
     <div class="slide-counter" id="counter">1 / 6</div>
 
-
-  </div><!-- end image-zone -->
+  </div>
 
   <!-- PRODUCT INFO -->
   <div class="product-section">
     <div class="product-category">منتجات الطبخ</div>
     <div class="product-name">قطّاعة الخضروات متعددة الوظائف 10 في 1 مع حاوية تخزين</div>
 
-    <!-- 4.5 stars — fixed half-star rendering -->
     <div class="rating-row">
       <div class="stars">
         <span class="s-full">★</span>
         <span class="s-full">★</span>
         <span class="s-full">★</span>
         <span class="s-full">★</span>
-        <!--
-          Half star: a 8px-wide box clips the left half of ★
-          followed by the right-half empty star
-        -->
         <span class="s-half"></span><span class="s-empty">★</span>
       </div>
       <span class="rating-val">4.5</span>
@@ -765,16 +741,12 @@
     </div>
   </div>
 
-</div><!-- end page-wrapper -->
+</div>
 
 <!-- VIDEO MODAL -->
 <div class="video-overlay" id="videoOverlay" onclick="closeVideoIfBg(event)">
   <div class="video-box">
     <button class="video-close" onclick="closeVideo()">✕</button>
-    <!--
-      Replace "video.mp4" with your actual video file name.
-      Put the video file in the same folder as this HTML file.
-    -->
     <video id="videoPlayer" controls playsinline>
       <source src="video.mp4" type="video/mp4">
       متصفحك لا يدعم تشغيل الفيديو.
@@ -861,10 +833,6 @@
 <script>
 /* ══════════════════════════════════════════════
    CAROUSEL
-   track direction: ltr → translateX(-N*100%) always works
-   Arrow logic (RTL page):
-     Left  arrow (arr-left)  = NEXT  slide (+1)
-     Right arrow (arr-right) = PREV  slide (-1)
 ══════════════════════════════════════════════ */
 (function () {
   const TOTAL   = 6;
@@ -874,10 +842,9 @@
   const track   = document.getElementById('track');
   const counter = document.getElementById('counter');
   const dotsWrap= document.getElementById('dots');
-  const btnNext = document.getElementById('arrNext'); // left  side
-  const btnPrev = document.getElementById('arrPrev'); // right side
+  const btnNext = document.getElementById('arrNext');
+  const btnPrev = document.getElementById('arrPrev');
 
-  /* Build dots */
   for (let i = 0; i < TOTAL; i++) {
     const d = document.createElement('div');
     d.className = 'dot' + (i === 0 ? ' on' : '');
@@ -885,9 +852,8 @@
     dotsWrap.appendChild(d);
   }
 
-  /* Image fallback */
   document.querySelectorAll('.carousel-slide img').forEach(img => {
-    const fallback = img.nextElementSibling; // .slide-fallback
+    const fallback = img.nextElementSibling;
     function showFallback() {
       img.style.display = 'none';
       if (fallback) fallback.style.display = 'flex';
@@ -896,20 +862,12 @@
     if (img.complete && img.naturalWidth === 0) showFallback();
   });
 
-  /* Core update */
   function refresh() {
-    /* Move track: negative translateX shows the slide at index cur */
     track.style.transform = `translateX(-${cur * 100}%)`;
-
-    /* Dots */
     dotsWrap.querySelectorAll('.dot').forEach((d, i) =>
       d.classList.toggle('on', i === cur)
     );
-
-    /* Counter */
     counter.textContent = `${cur + 1} / ${TOTAL}`;
-
-    /* Arrow disabled states */
     btnPrev.disabled = cur === 0;
     btnNext.disabled = cur === TOTAL - 1;
   }
@@ -925,11 +883,9 @@
     timer = setInterval(() => goTo((cur + 1) % TOTAL), 4500);
   }
 
-  /* Expose for buttons */
-  btnNext.addEventListener('click', () => goTo(cur + 1)); // left  = next
-  btnPrev.addEventListener('click', () => goTo(cur - 1)); // right = prev
+  btnNext.addEventListener('click', () => goTo(cur + 1));
+  btnPrev.addEventListener('click', () => goTo(cur - 1));
 
-  /* Touch swipe — in RTL, swipe-left = next, swipe-right = prev */
   let tx = 0;
   track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
   track.addEventListener('touchend',   e => {
@@ -1054,6 +1010,25 @@ function handleOverlayClick(e) {
 }
 
 /* ══════════════════════════════════════════════
+   GOOGLE SHEETS
+══════════════════════════════════════════════ */
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbyanG-Xzwricz-CMXfczh702IxxiXtK8ij_u9XCVuop1wJuKJF0Nl5YsJVNv829j7nN/exec";
+
+async function sendToGoogleSheets(orderData) {
+  try {
+    await fetch(GOOGLE_SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderData)
+    });
+    console.log('✅ تم التسجيل في Google Sheets');
+  } catch(error) {
+    console.error('❌ خطأ في Google Sheets:', error);
+  }
+}
+
+/* ══════════════════════════════════════════════
    BARK
 ══════════════════════════════════════════════ */
 const BARK_KEY = "yhrSddNSj3RmAdHvEjs95j";
@@ -1104,11 +1079,21 @@ function submitOrder() {
   if (phoneErr) setTimeout(() => err.classList.remove('show'), 3500);
   if (!ok) return;
 
-  sendToBark({
-    firstName: fn.value.trim(), lastName: ln.value.trim(),
-    wilaya: wl.value, quartier: qt.value.trim(),
-    phones: phones.join(' / '), qty, total: (qty * PRICE).toLocaleString()
-  });
+  const orderData = {
+    firstName: fn.value.trim(),
+    lastName: ln.value.trim(),
+    wilaya: wl.value,
+    quartier: qt.value.trim(),
+    phones: phones.join(' / '),
+    qty: qty,
+    total: (qty * PRICE).toLocaleString()
+  };
+
+  // إرسال إلى Google Sheets
+  sendToGoogleSheets(orderData);
+
+  // إرسال إلى Bark
+  sendToBark(orderData);
 
   closeModal();
   document.getElementById('successOverlay').classList.add('show');
