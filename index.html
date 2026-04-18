@@ -80,6 +80,217 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     white-space: nowrap;
   }
 
+  /* ── CART BUTTON ── */
+  .nav-cart-btn {
+    position: relative;
+    width: 38px; height: 38px;
+    background: var(--cream); border: 1.5px solid var(--border);
+    border-radius: 11px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.18s, border-color 0.18s, transform 0.15s;
+    flex-shrink: 0;
+  }
+  .nav-cart-btn:hover { background: rgba(200,57,10,0.06); border-color: rgba(200,57,10,0.3); }
+  .nav-cart-btn:active { transform: scale(0.93); }
+  .nav-cart-btn svg { width: 18px; height: 18px; stroke: var(--mid); }
+  .cart-badge {
+    position: absolute; top: -5px; right: -5px;
+    background: var(--primary); color: white;
+    font-size: 10px; font-weight: 800;
+    min-width: 18px; height: 18px; border-radius: 9px;
+    display: none; align-items: center; justify-content: center;
+    padding: 0 4px; border: 2px solid white;
+    font-family: 'Tajawal';
+  }
+  .cart-badge.visible { display: flex; }
+  @keyframes badgePop {
+    0%   { transform: scale(0.5); }
+    70%  { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  .cart-badge.pop { animation: badgePop 0.3s cubic-bezier(0.34,1.3,0.64,1); }
+
+  /* ── CART DRAWER ── */
+  .cart-overlay {
+    position: fixed; inset: 0;
+    background: rgba(10,5,0,0.52); backdrop-filter: blur(5px);
+    z-index: 1500; opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+  .cart-drawer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    max-width: 480px; margin: 0 auto;
+    background: var(--white);
+    border-radius: 26px 26px 0 0;
+    z-index: 1600;
+    transform: translateY(100%);
+    transition: transform 0.38s cubic-bezier(0.34,1.15,0.64,1);
+    max-height: 85vh;
+    display: flex; flex-direction: column;
+  }
+  .cart-overlay.open .cart-drawer { transform: translateY(0); }
+
+  .cart-header {
+    padding: 16px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .cart-handle { width: 38px; height: 4px; background: #E0D8D0; border-radius: 2px; margin: 0 auto 14px; }
+  .cart-title-row { display: flex; align-items: center; gap: 9px; }
+  .cart-title {
+    font-family: 'Tajawal'; font-size: 19px; font-weight: 800; color: var(--deep);
+  }
+  .cart-count-chip {
+    background: rgba(200,57,10,0.10); color: var(--primary);
+    font-size: 12px; font-weight: 800; padding: 2px 9px; border-radius: 20px;
+    font-family: 'Tajawal';
+  }
+  .cart-close-btn {
+    width: 32px; height: 32px; border-radius: 9px;
+    background: #F2EDE9; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--mid);
+    transition: background 0.15s;
+  }
+  .cart-close-btn:hover { background: rgba(200,57,10,0.10); }
+
+  .cart-body {
+    flex: 1; overflow-y: auto; padding: 14px 18px;
+  }
+
+  /* Cart Item */
+  .cart-item {
+    display: flex; align-items: center; gap: 13px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .cart-item:last-child { border-bottom: none; }
+  .cart-item-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: #FAF0EB;
+    border: 1.5px solid rgba(200,57,10,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .cart-item-icon svg { width: 22px; height: 22px; stroke: var(--primary); }
+  .cart-item-info { flex: 1; min-width: 0; }
+  .cart-item-name {
+    font-size: 12.5px; font-weight: 700; color: var(--deep);
+    margin-bottom: 3px; line-height: 1.4;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .cart-item-price { font-size: 12px; color: var(--primary); font-weight: 700; font-family: 'Tajawal'; }
+  .cart-item-controls {
+    display: flex; align-items: center; gap: 0;
+    background: var(--cream); border: 1.5px solid var(--border);
+    border-radius: 10px; overflow: hidden; flex-shrink: 0;
+  }
+  .cart-qty-btn {
+    width: 32px; height: 32px; border: none; background: transparent;
+    font-size: 17px; font-weight: 700; color: var(--primary);
+    cursor: pointer; transition: background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cart-qty-btn:hover { background: rgba(200,57,10,0.07); }
+  .cart-qty-btn:disabled { color: #ccc; cursor: not-allowed; }
+  .cart-qty-val {
+    font-family: 'Tajawal'; font-size: 14px; font-weight: 900; color: var(--deep);
+    min-width: 26px; text-align: center;
+    border-right: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    line-height: 32px;
+  }
+  .cart-item-remove {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: rgba(200,57,10,0.06); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--primary);
+    transition: background 0.15s; margin-right: 6px;
+  }
+  .cart-item-remove:hover { background: rgba(200,57,10,0.14); }
+
+  /* Empty Cart */
+  .cart-empty {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 48px 20px; gap: 14px; text-align: center;
+  }
+  .cart-empty-icon {
+    width: 72px; height: 72px; border-radius: 20px;
+    background: #FAF7F4; border: 2px dashed var(--border);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cart-empty-icon svg { width: 30px; height: 30px; stroke: var(--muted); }
+  .cart-empty-title { font-family: 'Tajawal'; font-size: 16px; font-weight: 700; color: var(--mid); }
+  .cart-empty-sub { font-size: 12.5px; color: var(--muted); }
+
+  /* Cart Footer */
+  .cart-footer {
+    padding: 14px 18px 28px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .cart-summary-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 5px;
+  }
+  .cart-summary-label { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .cart-summary-val { font-size: 12.5px; color: var(--mid); font-weight: 700; font-family: 'Tajawal'; }
+  .cart-total-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 11px 0; border-top: 1px solid var(--border); margin-top: 8px; margin-bottom: 14px;
+  }
+  .cart-total-label { font-family: 'Tajawal'; font-size: 15px; font-weight: 800; color: var(--deep); }
+  .cart-total-val { font-family: 'Tajawal'; font-size: 22px; font-weight: 900; color: var(--primary); }
+  .cart-checkout-btn {
+    width: 100%; padding: 16px;
+    background: var(--primary); color: white; border: none; border-radius: 14px;
+    font-family: 'Tajawal'; font-size: 16px; font-weight: 800; cursor: pointer;
+    box-shadow: 0 8px 26px rgba(200,57,10,0.28);
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    position: relative; overflow: hidden;
+  }
+  .cart-checkout-btn::before {
+    content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+    background: linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+    transition: left 0.5s;
+  }
+  .cart-checkout-btn:hover::before { left:100%; }
+  .cart-checkout-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(200,57,10,0.35); }
+  .cart-checkout-btn:active { transform: translateY(0); }
+  .cart-checkout-btn:disabled {
+    background: #ccc; cursor: not-allowed;
+    box-shadow: none; transform: none;
+  }
+
+  /* Add to Cart animation */
+  @keyframes flyToCart {
+    0%   { opacity:1; transform: scale(1) translate(0,0); }
+    80%  { opacity:0.8; transform: scale(0.5) translate(-80px, -120px); }
+    100% { opacity:0; transform: scale(0.1) translate(-120px, -180px); }
+  }
+  .fly-dot {
+    position: fixed;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--primary); pointer-events: none; z-index: 9999;
+    animation: flyToCart 0.55s cubic-bezier(0.4,0,0.6,1) forwards;
+  }
+
+  /* Quick Add notification */
+  .add-notif {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--deep); color: white;
+    padding: 10px 20px; border-radius: 50px;
+    font-size: 12.5px; font-weight: 700; font-family: 'Tajawal';
+    z-index: 1400; white-space: nowrap;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .add-notif.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
   /* ══════════════════════════════════════
      CAROUSEL
      - The wrapper has overflow:hidden
@@ -544,7 +755,65 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       </div>
       <span class="brand-name">Cuisineo</span>
     </div>
-    <div class="nav-tag">متجر رسمي</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="nav-tag">متجر رسمي</div>
+      <button class="nav-cart-btn" id="cartToggleBtn" onclick="openCart()" aria-label="السلة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CART DRAWER -->
+  <div class="cart-overlay" id="cartOverlay" onclick="handleCartOverlayClick(event)">
+    <div class="cart-drawer" id="cartDrawer">
+      <div style="padding:12px 18px 0;">
+        <div class="cart-handle"></div>
+      </div>
+      <div class="cart-header">
+        <div class="cart-title-row">
+          <div class="cart-title">🛒 سلة الطلب</div>
+          <div class="cart-count-chip" id="cartCountChip">0 منتج</div>
+        </div>
+        <button class="cart-close-btn" onclick="closeCart()">✕</button>
+      </div>
+      <div class="cart-body" id="cartBody">
+        <!-- filled by JS -->
+      </div>
+      <div class="cart-footer" id="cartFooter" style="display:none;">
+        <div class="cart-summary-row">
+          <span class="cart-summary-label">سعر الوحدة</span>
+          <span class="cart-summary-val" id="cartUnitPrice">2,450 دج</span>
+        </div>
+        <div class="cart-summary-row">
+          <span class="cart-summary-label">الكمية الإجمالية</span>
+          <span class="cart-summary-val" id="cartTotalQty">—</span>
+        </div>
+        <div class="cart-total-row">
+          <span class="cart-total-label">المجموع الكلي</span>
+          <span class="cart-total-val" id="cartGrandTotal">0 دج</span>
+        </div>
+        <button class="cart-checkout-btn" id="cartCheckoutBtn" onclick="checkoutFromCart()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+          إتمام الطلب — دفع عند الاستلام
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD NOTIFICATION -->
+  <div class="add-notif" id="addNotif">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+         stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;stroke:#4ade80">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    تمت الإضافة إلى السلة
   </div>
 
   <!-- CAROUSEL -->
@@ -730,7 +999,18 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
   <!-- CTA -->
   <div class="cta-section">
-    <button class="cta-btn" onclick="openModal()">اطلب الان وادفع عند الاستلام 🚚 </button>
+    <div style="display:flex;gap:10px;margin-bottom:10px;">
+      <button class="cta-btn" id="addToCartBtn" onclick="addToCart()" style="flex:1;background:var(--white);color:var(--primary);border:2px solid var(--primary);box-shadow:0 4px 14px rgba(200,57,10,0.12);">
+        <span style="display:flex;align-items:center;justify-content:center;gap:7px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          أضف للسلة
+        </span>
+      </button>
+      <button class="cta-btn" onclick="openModal()" style="flex:2;">إتمام الشراء </button>
+    </div>
     <div class="trust-bar">
       <div class="trust-item">
         <div class="trust-icon">
@@ -1009,6 +1289,13 @@ function removePhone(btn) { btn.parentElement.remove(); phoneCount--; }
    ORDER MODAL
 ══════════════════════════════════════════════ */
 function openModal() {
+  // if cart has items, use cart total quantity
+  const cartTotal = getTotalQty ? getTotalQty() : 0;
+  if (cartTotal > 0) {
+    qty = Math.min(13, cartTotal);
+    document.getElementById('qty').textContent = qty;
+    document.getElementById('total').textContent = (qty * PRICE).toLocaleString() + ' دج';
+  }
   document.getElementById('modalOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
   document.getElementById('modal-qty').textContent   = qty + ' قطعة';
@@ -1112,7 +1399,159 @@ function submitOrder() {
   document.getElementById('successOverlay').classList.add('show');
 }
 
+/* ══════════════════════════════════════════════
+   CART SYSTEM
+══════════════════════════════════════════════ */
+const CART_PRICE = 2450;
+let cartItems = []; // [{id, name, qty}]
+
+function openCart() {
+  document.getElementById('cartOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderCart();
+}
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleCartOverlayClick(e) {
+  if (e.target === document.getElementById('cartOverlay')) closeCart();
+}
+
+function addToCart() {
+  const existingIdx = cartItems.findIndex(i => i.id === 'cuisineo-v10');
+  const addQty = qty; // uses the page quantity selector
+  if (existingIdx >= 0) {
+    cartItems[existingIdx].qty = Math.min(13, cartItems[existingIdx].qty + addQty);
+  } else {
+    cartItems.push({
+      id: 'cuisineo-v10',
+      name: 'قطّاعة الخضروات 10 في 1',
+      qty: Math.min(13, addQty)
+    });
+  }
+  updateCartBadge(true);
+  showAddNotif();
+  animateFlyDot();
+}
+
+function cartChangeQty(id, delta) {
+  const idx = cartItems.findIndex(i => i.id === id);
+  if (idx < 0) return;
+  cartItems[idx].qty = Math.max(1, Math.min(13, cartItems[idx].qty + delta));
+  renderCart();
+  updateCartBadge(false);
+}
+
+function cartRemoveItem(id) {
+  cartItems = cartItems.filter(i => i.id !== id);
+  renderCart();
+  updateCartBadge(false);
+}
+
+function getTotalQty() { return cartItems.reduce((s, i) => s + i.qty, 0); }
+function getTotalPrice() { return getTotalQty() * CART_PRICE; }
+
+function updateCartBadge(animate) {
+  const badge = document.getElementById('cartBadge');
+  const total = getTotalQty();
+  if (total > 0) {
+    badge.textContent = total > 99 ? '99+' : total;
+    badge.classList.add('visible');
+    if (animate) {
+      badge.classList.remove('pop');
+      void badge.offsetWidth;
+      badge.classList.add('pop');
+    }
+  } else {
+    badge.classList.remove('visible');
+  }
+}
+
+function renderCart() {
+  const body = document.getElementById('cartBody');
+  const footer = document.getElementById('cartFooter');
+  const chip = document.getElementById('cartCountChip');
+  const totalQty = getTotalQty();
+  const totalPrice = getTotalPrice();
+
+  chip.textContent = totalQty + ' ' + (totalQty === 1 ? 'منتج' : 'منتجات');
+
+  if (cartItems.length === 0) {
+    footer.style.display = 'none';
+    body.innerHTML = `
+      <div class="cart-empty">
+        <div class="cart-empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+        </div>
+        <div class="cart-empty-title">السلة فارغة</div>
+        <div class="cart-empty-sub">أضف منتجاً لبدء طلبك</div>
+      </div>`;
+    return;
+  }
+
+  footer.style.display = 'block';
+  document.getElementById('cartUnitPrice').textContent = CART_PRICE.toLocaleString() + ' دج';
+  document.getElementById('cartTotalQty').textContent = totalQty + ' قطعة';
+  document.getElementById('cartGrandTotal').textContent = totalPrice.toLocaleString() + ' دج';
+
+  body.innerHTML = cartItems.map(item => `
+    <div class="cart-item" id="cart-item-${item.id}">
+      <div class="cart-item-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18M8 6V4a2 2 0 0 1 4 0v2M17 6v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6"/>
+        </svg>
+      </div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${(item.qty * CART_PRICE).toLocaleString()} دج</div>
+      </div>
+      <button class="cart-item-remove" onclick="cartRemoveItem('${item.id}')" title="حذف">🗑</button>
+      <div class="cart-item-controls">
+        <button class="cart-qty-btn" onclick="cartChangeQty('${item.id}',-1)" ${item.qty <= 1 ? 'disabled' : ''}>−</button>
+        <div class="cart-qty-val">${item.qty}</div>
+        <button class="cart-qty-btn" onclick="cartChangeQty('${item.id}',1)" ${item.qty >= 13 ? 'disabled' : ''}>+</button>
+      </div>
+    </div>`).join('');
+}
+
+function checkoutFromCart() {
+  if (cartItems.length === 0) return;
+  const totalQty = getTotalQty();
+  // sync main qty with cart total
+  qty = Math.min(13, totalQty);
+  document.getElementById('qty').textContent = qty;
+  document.getElementById('total').textContent = (qty * CART_PRICE).toLocaleString() + ' دج';
+  closeCart();
+  openModal();
+}
+
+function showAddNotif() {
+  const n = document.getElementById('addNotif');
+  n.classList.add('show');
+  clearTimeout(n._t);
+  n._t = setTimeout(() => n.classList.remove('show'), 2200);
+}
+
+function animateFlyDot() {
+  const btn = document.getElementById('addToCartBtn');
+  const badge = document.getElementById('cartBadge');
+  if (!btn || !badge) return;
+  const br = btn.getBoundingClientRect();
+  const dot = document.createElement('div');
+  dot.className = 'fly-dot';
+  dot.style.left = (br.left + br.width / 2 - 7) + 'px';
+  dot.style.top  = (br.top  + br.height / 2 - 7) + 'px';
+  document.body.appendChild(dot);
+  dot.addEventListener('animationend', () => dot.remove());
+}
+
 function closeSuccess() {
+  cartItems = [];
+  updateCartBadge(false);
   document.getElementById('successOverlay').classList.remove('show');
   ['firstName','lastName','quartier'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
